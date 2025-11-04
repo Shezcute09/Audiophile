@@ -1,10 +1,12 @@
 'use client';
+import { Suspense } from 'react';
 import Layout from '@/components/Layout';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { CheckCircle, Package, Truck, Mail } from 'lucide-react';
 
-export default function OrderConfirmationPage() {
+// Component that uses useSearchParams - wrapped in Suspense
+function OrderConfirmationContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
 
@@ -93,5 +95,27 @@ export default function OrderConfirmationPage() {
         </div>
       </div>
     </Layout>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function OrderConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <Layout>
+        <div className="container mx-auto px-4 py-20">
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="animate-pulse">
+              <div className="w-20 h-20 bg-gray-300 rounded-full mx-auto mb-6"></div>
+              <div className="h-8 bg-gray-300 rounded w-64 mx-auto mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-48 mx-auto mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-32 mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    }>
+      <OrderConfirmationContent />
+    </Suspense>
   );
 }
